@@ -1,0 +1,6 @@
+name = "el-armario-api"
+main = "src/index.js"
+compatibility_date = "2026-11-01"
+
+[vars]
+ALLOWED_ORIGINS = "https://el-armario.pages.dev,http://localhost:5173,http://127.0.0.1:5173"

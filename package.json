@@ -1,0 +1,1 @@
+{"name":"el-armario-backend","private":true,"version":"1.0.0","type":"module","scripts":{"dev":"wrangler dev --port 8787","deploy":"wrangler deploy","test":"node --test"},"dependencies":{"papaparse":"^5.5.3"},"devDependencies":{"wrangler":"^4.0.0"}}
