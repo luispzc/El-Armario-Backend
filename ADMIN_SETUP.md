@@ -35,7 +35,7 @@ Haz tus commits y push de El-Armario-Backend. En Cloudflare, el Worker el-armari
 - Comando de compilación: vacío (o npm test si quieres ejecutar las pruebas en CI).
 - Comando de despliegue: npx wrangler deploy
 
-El wrangler.toml del backend declara D1 y R2. Crear los recursos y aplicar la migración antes de desplegar evita interrumpir el catálogo. ALLOWED_ORIGINS ya incluye el-armario.lezmarucrack.workers.dev, el dominio pages.dev anterior y localhost. Si usas otro dominio, añádelo ahí.
+El wrangler.toml del backend declara D1 y R2. Crear los recursos y aplicar la migración antes de desplegar evita interrumpir el catálogo. ALLOWED_ORIGINS ya incluye el-armario.catalogotienda.workers.dev, el dominio pages.dev anterior y localhost. Si usas otro dominio, añádelo ahí.
 
 ## 4. Subir y desplegar el frontend
 
@@ -48,11 +48,11 @@ En Cloudflare, el frontend el-armario debe usar:
 - Variable de compilación VITE_API_URL: /api/products
 - Directorio raíz: /
 
-El comando anterior con --assets ./dist --name el-armario --compatibility-date 2026-11-04 también respeta la nueva configuración, pero npx wrangler deploy evita duplicarla. API_ORIGIN, en el wrangler.toml del frontend, apunta a https://el-armario-api.lezmarucrack.workers.dev.
+El comando anterior con --assets ./dist --name el-armario --compatibility-date 2026-11-04 también respeta la nueva configuración, pero npx wrangler deploy evita duplicarla. API_ORIGIN, en el wrangler.toml del frontend, apunta a https://el-armario-api.catalogotienda.workers.dev.
 
 ## 5. Entrar al panel
 
-Abre https://el-armario.lezmarucrack.workers.dev/admin e inicia sesión con el correo y contraseña que creaste.
+Abre https://el-armario.catalogotienda.workers.dev/admin e inicia sesión con el correo y contraseña que creaste.
 
 Puedes añadir prendas, subir fotos, editar precios y tallas, marcar vendido y ocultar o volver a mostrar prendas. Guardar actualiza D1; no necesitas hacer commits para cambiar el inventario. El catálogo abierto en otra pestaña se actualiza al recargar.
 

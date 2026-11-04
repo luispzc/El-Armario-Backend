@@ -5,7 +5,7 @@ import {serveImage} from './media.js';
 export function createHandler(fetchImpl=fetch,cacheStorage=globalThis.caches) {
  return async function handle(request,env={},ctx={waitUntil:()=>{}}) {
  const url=new URL(request.url),origin=request.headers.get('Origin');
- const allowed=(env.ALLOWED_ORIGINS||'https://el-armario.lezmarucrack.workers.dev,https://el-armario.pages.dev,http://localhost:5173,http://127.0.0.1:5173').split(',').map(v=>v.trim());
+ const allowed=(env.ALLOWED_ORIGINS||'https://el-armario.catalogotienda.workers.dev,https://el-armario.pages.dev,http://localhost:5173,http://127.0.0.1:5173').split(',').map(v=>v.trim());
  const headers={'Content-Type':'application/json; charset=utf-8','X-Content-Type-Options':'nosniff','Vary':'Origin','Cache-Control':'no-store'};
  if(origin&&allowed.includes(origin)){headers['Access-Control-Allow-Origin']=origin;headers['Access-Control-Allow-Credentials']='true';}
  const json=(data,options={})=>new Response(request.method==='HEAD'?null:JSON.stringify(data),{status:options.status||200,headers:{...headers,...options.headers}});
