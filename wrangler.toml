@@ -3,7 +3,7 @@ main = "src/index.js"
 compatibility_date = "2026-11-01"
 
 [vars]
-ALLOWED_ORIGINS = "https://el-armario.lezmarucrack.workers.dev,https://el-armario.pages.dev,http://localhost:5173,http://127.0.0.1:5173"
+ALLOWED_ORIGINS = "https://el-armario.catalogotienda.workers.dev,https://el-armario.pages.dev,http://localhost:5173,http://127.0.0.1:5173"
 # Reemplazar el UUID con el database_id de la D1 creada en tu cuenta.
 [[d1_databases]]
 binding = "DB"
