@@ -4,3 +4,13 @@ compatibility_date = "2026-11-01"
 
 [vars]
 ALLOWED_ORIGINS = "https://el-armario.lezmarucrack.workers.dev,https://el-armario.pages.dev,http://localhost:5173,http://127.0.0.1:5173"
+# Reemplazar el UUID con el database_id de la D1 creada en tu cuenta.
+[[d1_databases]]
+binding = "DB"
+database_name = "el-armario-db"
+database_id = "00000000-0000-0000-0000-000000000000"
+migrations_dir = "migrations"
+
+[[r2_buckets]]
+binding = "IMAGES"
+bucket_name = "el-armario-images"

@@ -1,37 +1,35 @@
-# El Armario · API de catálogo
+# El Armario · API y administrador
 
-Backend de lectura en Cloudflare Workers. Consulta el CSV público actual de Sheets y publica solo columnas permitidas; no necesita credenciales de Google. No modifica Sheets, Drive ni registra pedidos.
+Worker con catálogo público, administración privada, D1 y fotos en R2. Consulta [ADMIN_SETUP.md](./ADMIN_SETUP.md) para crear los recursos y tu cuenta real.
 
-## Desarrollo
-
-Node.js 22.12+ o 24 LTS.
+## Comandos
 
 ~~~sh
 npm ci
+npm test
+npm run db:migrate:local
+npm run admin:create -- --email tu@correo.com --local
 npm run dev
 ~~~
 
-Endpoints: GET /api/health y GET /api/products. En el frontend, define VITE_API_URL=http://localhost:8787/api/products en .env.local y reinicia Vite.
+Para producción: crear D1 y R2, sustituir database_id en wrangler.toml, aplicar db:migrate:remote y crear tu cuenta con admin:create --remote. Después publica por GitHub o npm run deploy. No se crearon recursos ni usuarios en producción.
 
-~~~sh
-npm test
-npx wrangler deploy --dry-run
-~~~
+## API
 
-## Configuración y despliegue futuro
+- GET /api/health: comprobación del servicio.
+- GET /api/products: catálogo público. Conserva el formato original de columnas.
+- GET /api/media/:id/:width.webp: foto pública optimizada. Caché inmutable y ETag.
+- GET /api/admin/status: indica si están conectados los bindings.
+- POST /api/admin/login, POST /api/admin/logout, GET /api/admin/me: sesión.
+- GET y POST /api/admin/products: listado privado y alta.
+- PUT /api/admin/products/:code: edición con revisión y visibilidad.
+- POST /api/admin/uploads: recibe las cuatro variantes WebP.
+- POST /api/admin/import: copia el catálogo actual a D1 sin sobrescribir ediciones y deja de sincronizar Sheets al terminar.
 
-wrangler.toml declara nombre del Worker y orígenes autorizados. ALLOWED_ORIGINS es una lista separada por comas. Incluye el origen real del frontend, y sus URLs de preview si las usarás. SHEET_CSV_URL permite reemplazar el CSV público; si no se indica, usa el de la web actual.
+Las escrituras exigen sesión (excepto login), origen permitido y X-Admin-Request: 1. No hay registro público. El frontend actúa como proxy del mismo dominio para las cookies HttpOnly.
 
-Para publicar cuando se decida: autenticar Wrangler con la cuenta Cloudflare correcta y ejecutar npm run deploy. Luego configurar VITE_API_URL en el frontend con la URL del Worker seguida de /api/products y recompilar. No se desplegó, no se hicieron commits ni push.
+## Transición
 
-## Contrato
+Antes de importar, Sheets se consulta con caché de 300 segundos y se combina con D1. D1 tiene prioridad por código. Después de importar, solo se consulta D1. La respuesta pública completa usa no-store para reflejar las ediciones del panel al recargar. Las fotos antiguas siguen en Drive y las nuevas se suben a R2.
 
-/api/products devuelve { products: [filas], updatedAt: fechaISO, source: 'google-sheets' }. Las filas usan codigo, nombre, tipo, talla, precio, foto1, foto2, foto3, vendido, genero, descripcion, foto_ia. El frontend valida y normaliza estos valores. updatedAt indica cuándo se leyó el CSV, no la última edición de la hoja.
-
-Solo GET, HEAD y OPTIONS. Errores de Google/formato devuelven 502 sin caché; no se confunden con catálogo vacío. CORS se aplica por origen. Caché de borde 300 s y del cliente 60 s; Cache API opera en el Worker desplegado y no garantiza caché compartida entre ubicaciones.
-
-La API es pública: CORS no es autenticación. No agregar información privada a las columnas públicas del catálogo. Los cambios de disponibilidad pueden tardar en propagarse. Esta API no garantiza reservas, cobros ni actualizaciones atómicas de stock.
-
-## Evolución recomendada
-
-Mantener Sheets/Drive mientras sea un catálogo con ventas coordinadas manualmente. Para reservas, stock transaccional, pedidos y administración concurrente: BD relacional y almacenamiento de objetos; migrar primero con exportación y validación, conservando códigos y enlaces. La migración de datos no forma parte de esta entrega.
+D1 y R2 locales están en .wrangler y no se versionan. La suite prueba las rutas con SQLite real y un bucket de prueba; además se verificó localmente con Wrangler/D1/R2.
