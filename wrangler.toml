@@ -8,7 +8,7 @@ ALLOWED_ORIGINS = "https://el-armario.lezmarucrack.workers.dev,https://el-armari
 [[d1_databases]]
 binding = "DB"
 database_name = "el-armario-db"
-database_id = "00000000-0000-0000-0000-000000000000"
+database_id = "d4dee875-af0a-4bbc-85be-f64b0687a61f"
 migrations_dir = "migrations"
 
 [[r2_buckets]]
